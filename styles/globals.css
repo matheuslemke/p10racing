@@ -1,3 +1,44 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-slate-900;
+    @apply text-slate-200;
+    @apply font-roboto;
+    @apply text-xl;
+  }
+
+  label {
+    @apply text-slate-400;
+    @apply mr-3;
+    @apply text-base;
+  }
+
+  form {
+    @apply p-7;
+  }
+
+  select {
+    @apply bg-slate-900;
+    @apply border-2;
+    @apply border-gray-600;
+    @apply border-solid;
+    @apply rounded-md;
+    @apply p-2;
+  }
+
+  input {
+    @apply bg-slate-900;
+    @apply border-2;
+    @apply border-gray-600;
+    @apply border-solid;
+    @apply rounded-md;
+    @apply p-2;
+  }
+
+  ::placeholder {
+    @apply text-red-600;
+  }
+}
