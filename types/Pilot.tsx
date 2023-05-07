@@ -1,6 +1,5 @@
-type Pilot = {
-  id: string
+export type Pilot = {
+  id: number
+  number: string
   name: string
 }
-
-export type { Pilot }
