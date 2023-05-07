@@ -1,5 +1,4 @@
 import { NextPage } from 'next'
-import { ChangeEventHandler } from 'react'
 
 interface Props {
   handleUserChange: any
@@ -7,9 +6,13 @@ interface Props {
 
 const UserIdentificator: NextPage<Props> = ({ handleUserChange }) => {
   return (
-    <div>
+    <div className="flex flex-col">
       <label htmlFor="user">{'Quem é você'}</label>
-      <input onChange={(evt) => handleUserChange(evt.target.value)} />
+      <input
+        onChange={(evt) => handleUserChange(evt.target.value)}
+        placeholder="User key"
+        className="placeholder:text-slate-700"
+      />
     </div>
   )
 }

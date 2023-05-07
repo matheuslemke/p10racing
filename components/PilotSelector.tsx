@@ -15,7 +15,7 @@ const PilotSelector: NextPage<Props> = ({
   value,
 }) => {
   return (
-    <div>
+    <div className='flex flex-col'>
       <label htmlFor="category">{category}</label>
       <select
         name={category}

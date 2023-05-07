@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { Pilot } from '../types/Pilot'
 import { Bid } from '../types/Bid'
+import Head from 'next/head'
 
 export const config = {
   unstable_runtimeJS: false,
@@ -80,23 +81,34 @@ const Home: NextPage<Props> = ({ pilots }) => {
 
   return (
     <>
-      <h1>GP: Miami</h1>
-      <form onSubmit={handleFormSubmit}>
-        <UserIdentificator handleUserChange={setUser} />
-        <PilotSelector
-          category={'P-10'}
-          handleChangePilot={setSelectedP10}
-          pilots={pilots}
-          value={selectedP10}
+      <Head>
+        <title>P10 Racing</title>
+        <meta
+          name="description"
+          content="P10 da rapaziada. Bora apostar no primeiro a se retirar da corrida e no décimo colocado."
         />
-        <PilotSelector
-          category={'1st Retirement'}
-          handleChangePilot={setSelectedFirstRetirement}
-          pilots={pilots}
-          value={selectedFirstRetirement}
-        />
-        <button type="submit">Salvar</button>
-      </form>
+      </Head>
+      <main>
+        <header className="border-b-2 border-gray-600 border-solid">
+          <h1 className="p-5 text-2xl">GP: Miami</h1>
+        </header>
+        <form className='flex flex-col gap-8' onSubmit={handleFormSubmit}>
+          <UserIdentificator handleUserChange={setUser} />
+          <PilotSelector
+            category={'P-10'}
+            handleChangePilot={setSelectedP10}
+            pilots={pilots}
+            value={selectedP10}
+          />
+          <PilotSelector
+            category={'1st Retirement'}
+            handleChangePilot={setSelectedFirstRetirement}
+            pilots={pilots}
+            value={selectedFirstRetirement}
+          />
+          <button type="submit" className='border-2 border-solid border-slate-400 mt-6 py-2'>Salvar</button>
+        </form>
+      </main>
     </>
   )
 }
