@@ -1,10 +1,15 @@
 import { NextPage } from 'next'
+import { ChangeEventHandler } from 'react'
 
-const UserIdentificator: NextPage = () => {
+interface Props {
+  handleUserChange: any
+}
+
+const UserIdentificator: NextPage<Props> = ({ handleUserChange }) => {
   return (
     <div>
       <label htmlFor="user">{'Quem é você'}</label>
-      <input />
+      <input onChange={(evt) => handleUserChange(evt.target.value)} />
     </div>
   )
 }
