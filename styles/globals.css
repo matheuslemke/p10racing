@@ -43,10 +43,8 @@
   }
 
   table {
-    @apply block;
-    @apply overflow-x-auto;
+    @apply w-full;
     @apply whitespace-nowrap;
-    @apply rounded-lg;
   }
 
   thead {
