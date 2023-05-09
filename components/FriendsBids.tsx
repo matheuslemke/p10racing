@@ -17,7 +17,11 @@ const FriendsBids: NextPage<Props> = ({ users, bids }) => {
           <thead>
             <tr>
               {users.map((user) => (
-                <th key={user.id} colSpan={2}>
+                <th
+                  key={user.id}
+                  colSpan={2}
+                  className="border-r-2 border-gray-800"
+                >
                   {user.name}
                 </th>
               ))}
@@ -28,7 +32,7 @@ const FriendsBids: NextPage<Props> = ({ users, bids }) => {
               {users.map(() => (
                 <>
                   <th>P-10</th>
-                  <th>1st Retirement</th>
+                  <th className="border-r-2 border-gray-800">1st Retirement</th>
                 </>
               ))}
             </tr>
@@ -42,15 +46,46 @@ const FriendsBids: NextPage<Props> = ({ users, bids }) => {
                   return (
                     <>
                       <td>-</td>
-                      <td>-</td>
+                      <td className="border-r-2 border-gray-800">-</td>
                     </>
                   )
                 }
 
                 return (
                   <>
-                    <td>{userBid.p10.name}</td>
-                    <td>{userBid.first_retirement.name}</td>
+                    <td>
+                      {userBid.p10.name}
+                    </td>
+                    <td className="border-r-2 border-gray-800">
+                      {userBid.first_retirement.name}
+                    </td>
+                  </>
+                )
+              })}
+            </tr>
+            <tr>
+              {users.map((user) => {
+                const userBid = bids
+                  .filter((bid) => bid.user === user.id)
+                  .shift()
+                if (!userBid) {
+                  return (
+                    <td
+                      colSpan={2}
+                      className="bg-green-900 p-1.5 border-r-2 border-gray-800"
+                    >
+                      0
+                    </td>
+                  )
+                }
+                return (
+                  <>
+                    <td
+                      colSpan={2}
+                      className="bg-green-900 p-1.5 border-r-2 border-gray-800"
+                    >
+                      {userBid.points}
+                    </td>
                   </>
                 )
               })}

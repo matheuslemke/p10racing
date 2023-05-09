@@ -130,7 +130,7 @@ export const getServerSideProps = async () => {
   // const { data: users } = await supabase.from('users').select('id, name')
   // const { data: bids } = await supabase
   //   .from('bids')
-  //   .select('id, user, p10(name), first_retirement(name)')
+  //   .select('id, user, points, p10(name), first_retirement(name)')
   //   .eq('gp', currentGP)
 
   const pilots: Pilot[] = [
@@ -151,6 +151,7 @@ export const getServerSideProps = async () => {
       user: 2,
       p10: { name: 'Kevin Magnussen' },
       first_retirement: { name: 'Kevin Magnussen' },
+      points: 10,
     },
     {
       id: 2,
@@ -158,6 +159,7 @@ export const getServerSideProps = async () => {
       user: 1,
       p10: { name: 'Max Verstappen' },
       first_retirement: { name: 'Kevin Magnussen' },
+      points: 88
     },
   ]
 

@@ -8,4 +8,5 @@ export type FriendBid = {
   first_retirement: {
     name: string
   }
+  points: number
 }

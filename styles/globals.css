@@ -75,7 +75,5 @@
     @apply py-4;
     @apply text-center;
     @apply bg-gray-800;
-    @apply border-b;
-    @apply border-gray-700;
   }
 }
