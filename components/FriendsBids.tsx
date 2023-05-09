@@ -1,11 +1,12 @@
 import { NextPage } from 'next'
 import { User } from '../types/User'
 import { FriendBid } from '../types/FriendBid'
-import currentGP from '../lib/currentGP'
+import { Gp } from '../types/Gp'
 
 interface Props {
   users: User[]
   bids: FriendBid[]
+  gps: Gp[]
 }
 
 interface TotalPoints {
@@ -13,15 +14,14 @@ interface TotalPoints {
   points: number
 }
 
-const FriendsBids: NextPage<Props> = ({ users, bids }) => {
-  const currentGPBids = bids ? bids.filter((bid) => bid.gp === currentGP) : []
-
+const FriendsBids: NextPage<Props> = ({ users, bids, gps }) => {
   let totalPoints: TotalPoints[] = users.map((user) => {
     return {
       user: user.id,
       points: bids
         ? bids.reduce(
-            (points, bid) => (bid.user === user.id ? points + bid.points : points),
+            (points, bid) =>
+              bid.user === user.id ? points + bid.points : points,
             0
           )
         : 0,
@@ -36,6 +36,7 @@ const FriendsBids: NextPage<Props> = ({ users, bids }) => {
         <table>
           <thead>
             <tr>
+              <th>GP</th>
               {users.map((user) => (
                 <th
                   key={user.id}
@@ -49,6 +50,7 @@ const FriendsBids: NextPage<Props> = ({ users, bids }) => {
           </thead>
           <tbody>
             <tr>
+              <th></th>
               {users.map(() => (
                 <>
                   <th>P-10</th>
@@ -56,64 +58,72 @@ const FriendsBids: NextPage<Props> = ({ users, bids }) => {
                 </>
               ))}
             </tr>
-            <tr>
-              {users.map((user) => {
-                const userBid = currentGPBids
-                  .filter((bid) => bid.user === user.id)
-                  .shift()
+            {gps.map((gp) => (
+              <>
+                <tr>
+                  <td rowSpan={2}>{gp.location}</td>
+                  {users.map((user) => {
+                    const userBid = bids
+                      .filter((bid) => bid.user === user.id && bid.gp === gp.id)
+                      .shift()
 
-                if (!userBid) {
-                  return (
-                    <>
-                      <td>-</td>
-                      <td className="border-r-2 border-gray-800">-</td>
-                    </>
-                  )
-                }
+                    if (!userBid) {
+                      return (
+                        <>
+                          <td></td>
+                          <td className="border-r-2 border-gray-800"></td>
+                        </>
+                      )
+                    }
 
-                return (
-                  <>
-                    <td>{userBid.p10.name}</td>
-                    <td className="border-r-2 border-gray-800">
-                      {userBid.first_retirement.name}
-                    </td>
-                  </>
-                )
-              })}
-            </tr>
+                    return (
+                      <>
+                        <td>{userBid.p10.name}</td>
+                        <td className="border-r-2 border-gray-800">
+                          {userBid.first_retirement.name}
+                        </td>
+                      </>
+                    )
+                  })}
+                </tr>
+                <tr>
+                  {users.map((user) => {
+                    const userBid = bids
+                      .filter((bid) => bid.user === user.id && bid.gp === gp.id)
+                      .shift()
+                    if (!userBid) {
+                      return (
+                        <td
+                          colSpan={2}
+                          className="bg-slate-700 p-1.5 border-r-2 border-gray-800 text-xs text-slate-400"
+                        >
+                          0
+                        </td>
+                      )
+                    }
+                    return (
+                      <>
+                        <td
+                          colSpan={2}
+                          className="bg-slate-700 p-1.5 border-r-2 border-gray-800 text-xs text-slate-400"
+                        >
+                          {userBid.points}
+                        </td>
+                      </>
+                    )
+                  })}
+                </tr>
+              </>
+            ))}
             <tr>
-              {users.map((user) => {
-                const userBid = currentGPBids
-                  .filter((bid) => bid.user === user.id)
-                  .shift()
-                if (!userBid) {
-                  return (
-                    <td
-                      colSpan={2}
-                      className="bg-slate-700 p-1.5 border-r-2 border-gray-800"
-                    >
-                      0
-                    </td>
-                  )
-                }
-                return (
-                  <>
-                    <td
-                      colSpan={2}
-                      className="bg-slate-700 p-1.5 border-r-2 border-gray-800"
-                    >
-                      {userBid.points}
-                    </td>
-                  </>
-                )
-              })}
-            </tr>
-            <tr>
+              <td className="uppercase bg-emerald-1000 border-t-8 border-slate-900">
+                Total
+              </td>
               {totalPoints.map((total) => (
                 <>
                   <td
                     colSpan={2}
-                    className="bg-emerald-900 border-t-2 border-slate-900 border-r-2"
+                    className="bg-emerald-900 border-t-8 border-slate-900 border-r-2"
                   >
                     {total.points}
                   </td>

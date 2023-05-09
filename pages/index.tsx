@@ -8,8 +8,8 @@ import { Bid } from '../types/Bid'
 import Head from 'next/head'
 import FriendsBids from '../components/FriendsBids'
 import { User } from '../types/User'
-import currentGP from '../lib/currentGP'
 import { FriendBid } from '../types/FriendBid'
+import { Gp } from '../types/Gp'
 
 export const config = {
   unstable_runtimeJS: false,
@@ -19,9 +19,10 @@ interface Props {
   pilots: Pilot[]
   users: User[]
   bids: FriendBid[]
+  gps: Gp[]
 }
 
-const Home: NextPage<Props> = ({ pilots, users, bids }) => {
+const Home: NextPage<Props> = ({ pilots, users, bids, gps }) => {
   const [user, setUser] = useState('')
   const [selectedP10, setSelectedP10] = useState(0)
   const [selectedFirstRetirement, setSelectedFirstRetirement] = useState(0)
@@ -119,7 +120,7 @@ const Home: NextPage<Props> = ({ pilots, users, bids }) => {
             Salvar
           </button>
         </form>
-        <FriendsBids users={users} bids={bids} />
+        <FriendsBids users={users} bids={bids} gps={gps} />
       </main>
     </>
   )
@@ -134,6 +135,10 @@ export const getServerSideProps = async () => {
   const { data: bids } = await supabase
     .from('bids')
     .select('id, gp, user, p10(name), first_retirement(name), points')
+  const { data: gps } = await supabase
+    .from('gps')
+    .select('id, location, seq')
+    .order('seq')
 
   // const pilots: Pilot[] = [
   //   { id: 1, name: 'Max Verstappen', number: '1' },
@@ -170,6 +175,7 @@ export const getServerSideProps = async () => {
       pilots,
       users,
       bids,
+      gps,
     },
   }
 }
