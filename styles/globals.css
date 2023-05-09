@@ -41,4 +41,43 @@
   ::placeholder {
     @apply text-red-600;
   }
+
+  table {
+    @apply block;
+    @apply overflow-x-auto;
+    @apply whitespace-nowrap;
+    @apply rounded-lg;
+  }
+
+  thead {
+    @apply uppercase;
+    @apply bg-gray-600;
+    @apply text-gray-300;
+    @apply text-base;
+  }
+
+  thead th {
+    @apply py-1.5;
+  }
+
+  tbody th {
+    @apply uppercase;
+    @apply text-xs;
+    @apply bg-gray-700;
+    @apply text-gray-400;
+  }
+
+  tbody {
+    @apply text-sm;
+  }
+
+  td {
+    @apply min-w-[120px];
+    @apply px-6;
+    @apply py-4;
+    @apply text-center;
+    @apply bg-gray-800;
+    @apply border-b;
+    @apply border-gray-700;
+  }
 }
