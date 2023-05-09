@@ -1,13 +1,33 @@
 import { NextPage } from 'next'
 import { User } from '../types/User'
 import { FriendBid } from '../types/FriendBid'
+import currentGP from '../lib/currentGP'
 
 interface Props {
   users: User[]
   bids: FriendBid[]
 }
 
+interface TotalPoints {
+  user: number
+  points: number
+}
+
 const FriendsBids: NextPage<Props> = ({ users, bids }) => {
+  const currentGPBids = bids ? bids.filter((bid) => bid.gp === currentGP) : []
+
+  let totalPoints: TotalPoints[] = users.map((user) => {
+    return {
+      user: user.id,
+      points: bids
+        ? bids.reduce(
+            (points, bid) => (bid.user === user.id ? points + bid.points : points),
+            0
+          )
+        : 0,
+    }
+  })
+
   return (
     <>
       <hr />
@@ -38,7 +58,7 @@ const FriendsBids: NextPage<Props> = ({ users, bids }) => {
             </tr>
             <tr>
               {users.map((user) => {
-                const userBid = bids
+                const userBid = currentGPBids
                   .filter((bid) => bid.user === user.id)
                   .shift()
 
@@ -53,9 +73,7 @@ const FriendsBids: NextPage<Props> = ({ users, bids }) => {
 
                 return (
                   <>
-                    <td>
-                      {userBid.p10.name}
-                    </td>
+                    <td>{userBid.p10.name}</td>
                     <td className="border-r-2 border-gray-800">
                       {userBid.first_retirement.name}
                     </td>
@@ -65,14 +83,14 @@ const FriendsBids: NextPage<Props> = ({ users, bids }) => {
             </tr>
             <tr>
               {users.map((user) => {
-                const userBid = bids
+                const userBid = currentGPBids
                   .filter((bid) => bid.user === user.id)
                   .shift()
                 if (!userBid) {
                   return (
                     <td
                       colSpan={2}
-                      className="bg-green-900 p-1.5 border-r-2 border-gray-800"
+                      className="bg-slate-700 p-1.5 border-r-2 border-gray-800"
                     >
                       0
                     </td>
@@ -82,13 +100,25 @@ const FriendsBids: NextPage<Props> = ({ users, bids }) => {
                   <>
                     <td
                       colSpan={2}
-                      className="bg-green-900 p-1.5 border-r-2 border-gray-800"
+                      className="bg-slate-700 p-1.5 border-r-2 border-gray-800"
                     >
                       {userBid.points}
                     </td>
                   </>
                 )
               })}
+            </tr>
+            <tr>
+              {totalPoints.map((total) => (
+                <>
+                  <td
+                    colSpan={2}
+                    className="bg-emerald-900 border-t-2 border-slate-900 border-r-2"
+                  >
+                    {total.points}
+                  </td>
+                </>
+              ))}
             </tr>
           </tbody>
         </table>

@@ -126,42 +126,44 @@ const Home: NextPage<Props> = ({ pilots, users, bids }) => {
 }
 
 export const getServerSideProps = async () => {
-  // const { data: pilots } = await supabase.from('pilots').select()
-  // const { data: users } = await supabase.from('users').select('id, name')
-  // const { data: bids } = await supabase
-  //   .from('bids')
-  //   .select('id, user, points, p10(name), first_retirement(name)')
-  //   .eq('gp', currentGP)
+  const { data: pilots } = await supabase.from('pilots').select()
+  const { data: users } = await supabase
+    .from('users')
+    .select('id, name')
+    .order('name', { ascending: true })
+  const { data: bids } = await supabase
+    .from('bids')
+    .select('id, gp, user, p10(name), first_retirement(name), points')
 
-  const pilots: Pilot[] = [
-    { id: 1, name: 'Max Verstappen', number: '1' },
-    { id: 2, name: 'Kevin Magnussen', number: '20' },
-  ]
-  const users = [
-    { name: 'Lemke', id: 1 },
-    { name: 'Dan', id: 3 },
-    { name: 'Pert', id: 5 },
-    { name: 'Anchieta', id: 4 },
-    { name: 'Coquinho', id: 2 },
-  ]
-  const bids: FriendBid[] = [
-    {
-      id: 1,
-      gp: 1,
-      user: 2,
-      p10: { name: 'Kevin Magnussen' },
-      first_retirement: { name: 'Kevin Magnussen' },
-      points: 10,
-    },
-    {
-      id: 2,
-      gp: 1,
-      user: 1,
-      p10: { name: 'Max Verstappen' },
-      first_retirement: { name: 'Kevin Magnussen' },
-      points: 88
-    },
-  ]
+  // const pilots: Pilot[] = [
+  //   { id: 1, name: 'Max Verstappen', number: '1' },
+  //   { id: 2, name: 'Kevin Magnussen', number: '20' },
+  // ]
+  // const users = [
+  //   { name: 'Lemke', id: 1 },
+  //   { name: 'Dan', id: 3 },
+  //   { name: 'Pert', id: 5 },
+  //   { name: 'Anchieta', id: 4 },
+  //   { name: 'Coquinho', id: 2 },
+  // ]
+  // const bids: FriendBid[] = [
+  //   {
+  //     id: 1,
+  //     gp: 1,
+  //     user: 2,
+  //     p10: { name: 'Kevin Magnussen' },
+  //     first_retirement: { name: 'Kevin Magnussen' },
+  //     points: 10,
+  //   },
+  //   {
+  //     id: 2,
+  //     gp: 1,
+  //     user: 1,
+  //     p10: { name: 'Max Verstappen' },
+  //     first_retirement: { name: 'Kevin Magnussen' },
+  //     points: 88
+  //   },
+  // ]
 
   return {
     props: {
