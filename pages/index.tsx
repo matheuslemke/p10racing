@@ -6,6 +6,10 @@ import { supabase } from '../lib/supabaseClient'
 import { Pilot } from '../types/Pilot'
 import { Bid } from '../types/Bid'
 import Head from 'next/head'
+import FriendsBids from '../components/FriendsBids'
+import { User } from '../types/User'
+import currentGP from '../lib/currentGP'
+import { FriendBid } from '../types/FriendBid'
 
 export const config = {
   unstable_runtimeJS: false,
@@ -13,9 +17,11 @@ export const config = {
 
 interface Props {
   pilots: Pilot[]
+  users: User[]
+  bids: FriendBid[]
 }
 
-const Home: NextPage<Props> = ({ pilots }) => {
+const Home: NextPage<Props> = ({ pilots, users, bids }) => {
   const [user, setUser] = useState('')
   const [selectedP10, setSelectedP10] = useState(0)
   const [selectedFirstRetirement, setSelectedFirstRetirement] = useState(0)
@@ -92,7 +98,7 @@ const Home: NextPage<Props> = ({ pilots }) => {
         <header className="border-b-2 border-gray-600 border-solid">
           <h1 className="p-5 text-2xl">GP: Miami</h1>
         </header>
-        <form className='flex flex-col gap-8' onSubmit={handleFormSubmit}>
+        <form className="flex flex-col gap-8" onSubmit={handleFormSubmit}>
           <UserIdentificator handleUserChange={setUser} />
           <PilotSelector
             category={'P-10'}
@@ -106,19 +112,60 @@ const Home: NextPage<Props> = ({ pilots }) => {
             pilots={pilots}
             value={selectedFirstRetirement}
           />
-          <button type="submit" className='border-2 border-solid border-slate-400 mt-6 py-2'>Salvar</button>
+          <button
+            type="submit"
+            className="border-2 border-solid border-slate-400 mt-6 py-2"
+          >
+            Salvar
+          </button>
         </form>
+        <FriendsBids users={users} bids={bids} />
       </main>
     </>
   )
 }
 
 export const getServerSideProps = async () => {
-  let { data } = await supabase.from('pilots').select()
+  // const { data: pilots } = await supabase.from('pilots').select()
+  // const { data: users } = await supabase.from('users').select('id, name')
+  // const { data: bids } = await supabase
+  //   .from('bids')
+  //   .select('id, user, p10(name), first_retirement(name)')
+  //   .eq('gp', currentGP)
+
+  const pilots: Pilot[] = [
+    { id: 1, name: 'Max Verstappen', number: '1' },
+    { id: 2, name: 'Kevin Magnussen', number: '20' },
+  ]
+  const users = [
+    { name: 'Lemke', id: 1 },
+    { name: 'Dan', id: 3 },
+    { name: 'Pert', id: 5 },
+    { name: 'Anchieta', id: 4 },
+    { name: 'Coquinho', id: 2 },
+  ]
+  const bids: FriendBid[] = [
+    {
+      id: 1,
+      gp: 1,
+      user: 2,
+      p10: { name: 'Kevin Magnussen' },
+      first_retirement: { name: 'Kevin Magnussen' },
+    },
+    {
+      id: 2,
+      gp: 1,
+      user: 1,
+      p10: { name: 'Max Verstappen' },
+      first_retirement: { name: 'Kevin Magnussen' },
+    },
+  ]
 
   return {
     props: {
-      pilots: data,
+      pilots,
+      users,
+      bids,
     },
   }
 }
