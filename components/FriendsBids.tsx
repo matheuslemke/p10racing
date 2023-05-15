@@ -29,7 +29,7 @@ const FriendsBids: NextPage<Props> = ({ users, bids, gps }) => {
   })
 
   return (
-    <>
+    <section>
       <hr />
       <h2 className="p-4">Apostas dos amigos</h2>
       <div className="relative overflow-x-auto shadow-md rounded-lg">
@@ -133,7 +133,7 @@ const FriendsBids: NextPage<Props> = ({ users, bids, gps }) => {
           </tbody>
         </table>
       </div>
-    </>
+    </section>
   )
 }
 
