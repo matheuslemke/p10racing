@@ -38,10 +38,6 @@
     @apply p-2;
   }
 
-  ::placeholder {
-    @apply text-red-600;
-  }
-
   table {
     @apply w-full;
     @apply whitespace-nowrap;
