@@ -1,5 +1,6 @@
 import { NextPage } from 'next'
 import { Pilot } from '../types/Pilot'
+import Required from './Required'
 
 interface Props {
   category: string
@@ -15,12 +16,16 @@ const PilotSelector: NextPage<Props> = ({
   value,
 }) => {
   return (
-    <div className='flex flex-col'>
-      <label htmlFor="category">{category}</label>
+    <div className="flex flex-col">
+      <label htmlFor="category">
+        {category}
+        <Required />
+      </label>
       <select
         name={category}
         onChange={(evt) => handleChangePilot(Number(evt.target.value))}
         value={value}
+        required
       >
         <option key={0} value={0} disabled>
           Selecione
