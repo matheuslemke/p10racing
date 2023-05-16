@@ -63,7 +63,7 @@ const BidForm: NextPage<Props> = ({ pilots, currentGp }) => {
 
       let { error: bidError } = await supabase.from('bids').upsert({
         id: bidId,
-        gp: 1,
+        gp: currentGp.id,
         user: userRef.id,
         p10: selectedP10,
         first_retirement: selectedFirstRetirement,
