@@ -1,5 +1,6 @@
 import { NextPage } from 'next'
 import { Pilot } from '../types/Pilot'
+import ErrorLabel from './ErrorLabel'
 import Required from './Required'
 
 interface Props {
@@ -7,6 +8,8 @@ interface Props {
   handleChangePilot: any
   pilots: Pilot[]
   value: number
+  error: string
+  handleOnFocus: any
 }
 
 const PilotSelector: NextPage<Props> = ({
@@ -14,6 +17,8 @@ const PilotSelector: NextPage<Props> = ({
   handleChangePilot,
   pilots,
   value,
+  error,
+  handleOnFocus,
 }) => {
   return (
     <div className="flex flex-col">
@@ -25,6 +30,8 @@ const PilotSelector: NextPage<Props> = ({
         name={category}
         onChange={(evt) => handleChangePilot(Number(evt.target.value))}
         value={value}
+        onFocus={() => handleOnFocus('')}
+        className={error ? 'border-red-800 mb-0' : 'border-slate-700 mb-4'}
         required
       >
         <option key={0} value={0} disabled>
@@ -38,6 +45,7 @@ const PilotSelector: NextPage<Props> = ({
           )
         })}
       </select>
+      <ErrorLabel msg={error} />
     </div>
   )
 }

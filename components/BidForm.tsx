@@ -1,11 +1,12 @@
 import { NextPage } from 'next'
-import PilotSelector from './PilotSelector'
-import UserIdentificator from './UserIdentificator'
-import { Pilot } from '../types/Pilot'
-import { Gp } from '../types/Gp'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { Bid } from '../types/Bid'
+import { Gp } from '../types/Gp'
+import { Pilot } from '../types/Pilot'
+import PilotSelector from './PilotSelector'
+import SuccessFeedback from './SuccessFeedback'
+import UserIdentificator from './UserIdentificator'
 
 interface Props {
   pilots: Pilot[]
@@ -16,7 +17,10 @@ const BidForm: NextPage<Props> = ({ pilots, currentGp }) => {
   const [user, setUser] = useState('')
   const [selectedP10, setSelectedP10] = useState(0)
   const [selectedFirstRetirement, setSelectedFirstRetirement] = useState(0)
+  const [success, setSuccess] = useState(false)
   const [userError, setUserError] = useState('')
+  const [p10Error, setP10Error] = useState('')
+  const [firstRetirementError, setFirstRetirementError] = useState('')
 
   const resetBid = () => {
     setSelectedP10(0)
@@ -25,6 +29,8 @@ const BidForm: NextPage<Props> = ({ pilots, currentGp }) => {
   }
   const resetErrors = () => {
     setUserError('')
+    setP10Error('')
+    setFirstRetirementError('')
   }
 
   const handleFormSubmit = async (evt: any) => {
@@ -46,7 +52,7 @@ const BidForm: NextPage<Props> = ({ pilots, currentGp }) => {
       let { error: bidDoesntExistsError, data: bids } = await supabase
         .from('bids')
         .select('id')
-        .eq('gp', currentGp)
+        .eq('gp', currentGp.id)
         .eq('user', userRef.id)
 
       if (bidDoesntExistsError) throw bidDoesntExistsError
@@ -64,52 +70,65 @@ const BidForm: NextPage<Props> = ({ pilots, currentGp }) => {
       } as Bid)
 
       if (bidError) {
-        errorMessage(`Faça direito ${userRef.name}`)
+        console.log('bidError', bidError)
+        if (!selectedP10) {
+          setP10Error('Selecione o piloto')
+        }
+        if (!selectedFirstRetirement) {
+          setFirstRetirementError('Selecione o piloto')
+        }
         throw bidError
       }
 
       resetBid()
-      successMessage()
+      setSuccess(true)
     } catch (e) {
       console.error(e)
     }
   }
 
   return (
-    <section>
-      <h2 className="pl-4 pt-4">GP: {currentGp?.location}</h2>
-      <form className="flex flex-col gap-6" onSubmit={handleFormSubmit}>
-        <UserIdentificator handleUserChange={setUser} error={userError} handleOnFocus={setUserError}/>
-        <PilotSelector
-          category={'P-10'}
-          handleChangePilot={setSelectedP10}
-          pilots={pilots}
-          value={selectedP10}
-        />
-        <PilotSelector
-          category={'1st Retirement'}
-          handleChangePilot={setSelectedFirstRetirement}
-          pilots={pilots}
-          value={selectedFirstRetirement}
-        />
-        <div className="w-full flex justify-center">
-          <button
-            type="submit"
-            className="border-2 border-solid border-slate-400 mt-6 py-2 px-8 w-fit"
-          >
-            Salvar
-          </button>
-        </div>
-      </form>
-    </section>
+    <>
+      <section>
+        <h2 className="pl-4 pt-4">GP: {currentGp?.location}</h2>
+        {success ? (
+          <SuccessFeedback />
+        ) : (
+          <form className="flex flex-col gap-6" onSubmit={handleFormSubmit}>
+            <UserIdentificator
+              handleUserChange={setUser}
+              error={userError}
+              handleOnFocus={setUserError}
+            />
+            <PilotSelector
+              category={'P-10'}
+              handleChangePilot={setSelectedP10}
+              pilots={pilots}
+              value={selectedP10}
+              error={p10Error}
+              handleOnFocus={setP10Error}
+            />
+            <PilotSelector
+              category={'1st Retirement'}
+              handleChangePilot={setSelectedFirstRetirement}
+              pilots={pilots}
+              value={selectedFirstRetirement}
+              error={firstRetirementError}
+              handleOnFocus={setFirstRetirementError}
+            />
+            <div className="w-full flex justify-center">
+              <button
+                type="submit"
+                className="border-2 border-solid border-slate-400 mt-6 py-2 px-8 w-fit"
+              >
+                Salvar
+              </button>
+            </div>
+          </form>
+        )}
+      </section>
+    </>
   )
-}
-
-const errorMessage = (msg: string) => {
-  console.error(msg)
-}
-const successMessage = () => {
-  alert('Deu boa')
 }
 
 export default BidForm
