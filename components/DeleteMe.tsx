@@ -1,6 +1,5 @@
 import type { NextPage } from 'next'
 import Meta from 'components/Meta'
-import SkipLink from 'components/SkipLink'
 import ExternalLink from 'components/ExternalLink'
 
 const DeleteMe: NextPage = () => {
@@ -18,7 +17,6 @@ const DeleteMe: NextPage = () => {
       h-screen
       overflow-auto"
     >
-      <SkipLink content="Skip to main content" />
       <div className="max-w-3xl mx-auto">
         <Meta />
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-8 sm:mb-12 text-center">
