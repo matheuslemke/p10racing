@@ -16,25 +16,31 @@ const BidForm: NextPage<Props> = ({ pilots, currentGp }) => {
   const [user, setUser] = useState('')
   const [selectedP10, setSelectedP10] = useState(0)
   const [selectedFirstRetirement, setSelectedFirstRetirement] = useState(0)
+  const [userError, setUserError] = useState('')
 
   const resetBid = () => {
     setSelectedP10(0)
     setSelectedFirstRetirement(0)
+    resetErrors()
+  }
+  const resetErrors = () => {
+    setUserError('')
   }
 
   const handleFormSubmit = async (evt: any) => {
     evt.preventDefault()
+    resetErrors()
 
     try {
       let bidId = undefined
-      let { error: userError, data: userRef } = await supabase
+      let { error, data: userRef } = await supabase
         .from('users')
         .select('id, name')
         .eq('key', user)
         .single()
-      if (userError || !userRef) {
-        errorMessage('Teu ID tá errado!')
-        throw userError
+      if (error || !userRef) {
+        setUserError('O ID está errado!')
+        throw error
       }
 
       let { error: bidDoesntExistsError, data: bids } = await supabase
@@ -69,13 +75,11 @@ const BidForm: NextPage<Props> = ({ pilots, currentGp }) => {
     }
   }
 
-  useEffect(() => {console.log('mudou')}, [selectedP10])
-
   return (
     <section>
       <h2 className="pl-4 pt-4">GP: {currentGp?.location}</h2>
-      <form className="flex flex-col gap-8" onSubmit={handleFormSubmit}>
-        <UserIdentificator handleUserChange={setUser} />
+      <form className="flex flex-col gap-6" onSubmit={handleFormSubmit}>
+        <UserIdentificator handleUserChange={setUser} error={userError} handleOnFocus={setUserError}/>
         <PilotSelector
           category={'P-10'}
           handleChangePilot={setSelectedP10}
@@ -102,7 +106,7 @@ const BidForm: NextPage<Props> = ({ pilots, currentGp }) => {
 }
 
 const errorMessage = (msg: string) => {
-  alert(msg)
+  console.error(msg)
 }
 const successMessage = () => {
   alert('Deu boa')
