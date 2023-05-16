@@ -1,6 +1,6 @@
 import { NextPage } from 'next'
-import Required from './Required'
 import ErrorLabel from './ErrorLabel'
+import Required from './Required'
 
 interface Props {
   handleUserChange: any
@@ -8,7 +8,11 @@ interface Props {
   handleOnFocus: any
 }
 
-const UserIdentificator: NextPage<Props> = ({ handleUserChange, error, handleOnFocus }) => {
+const UserIdentificator: NextPage<Props> = ({
+  handleUserChange,
+  error,
+  handleOnFocus,
+}) => {
   return (
     <div className="flex flex-col">
       <label htmlFor="user">

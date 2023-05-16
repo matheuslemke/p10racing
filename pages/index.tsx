@@ -20,7 +20,7 @@ interface Props {
 }
 
 const Home: NextPage<Props> = ({ pilots, users, bids, gps }) => {
-  const currentGp = gps.pop()!
+  const currentGp = gps[gps.length - 1]
 
   return (
     <>
@@ -42,7 +42,7 @@ const Home: NextPage<Props> = ({ pilots, users, bids, gps }) => {
   )
 }
 
-export const getServerSideProps = async () => {
+export const getStaticProps = async () => {
   const { data: pilots } = await supabase.from('pilots').select()
   const { data: users } = await supabase
     .from('users')

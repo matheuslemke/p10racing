@@ -1,7 +1,7 @@
 import { NextPage } from 'next'
-import { User } from '../types/User'
 import { FriendBid } from '../types/FriendBid'
 import { Gp } from '../types/Gp'
+import { User } from '../types/User'
 
 interface Props {
   users: User[]
