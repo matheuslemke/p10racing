@@ -21,6 +21,7 @@ const BidForm: NextPage<Props> = ({ pilots, currentGp }) => {
   const [userError, setUserError] = useState('')
   const [p10Error, setP10Error] = useState('')
   const [firstRetirementError, setFirstRetirementError] = useState('')
+  const [isClosed, setIsClosed] = useState(false)
 
   const resetBid = () => {
     setSelectedP10(0)
@@ -36,6 +37,14 @@ const BidForm: NextPage<Props> = ({ pilots, currentGp }) => {
   const handleFormSubmit = async (evt: any) => {
     evt.preventDefault()
     resetErrors()
+
+    const closeDate = new Date(currentGp.date)
+    closeDate.setHours(closeDate.getHours() - 2)
+    const now = new Date()
+    if (now >= closeDate) {
+      setIsClosed(true)
+      return
+    }
 
     try {
       let bidId = undefined
@@ -119,7 +128,8 @@ const BidForm: NextPage<Props> = ({ pilots, currentGp }) => {
             <div className="w-full flex justify-center">
               <button
                 type="submit"
-                className="border-2 border-solid border-slate-400 mt-6 py-2 px-8 w-fit"
+                className="border-2 border-solid border-slate-400 mt-6 py-2 px-8 w-fit disabled:border-slate-800 disabled:text-slate-800"
+                disabled={isClosed}
               >
                 Salvar
               </button>

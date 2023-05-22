@@ -53,7 +53,7 @@ export const getStaticProps = async () => {
     .select('id, gp, user, p10(name), first_retirement(name), points')
   const { data: gps } = await supabase
     .from('gps')
-    .select('id, location, seq')
+    .select('id, location, seq, date')
     .order('seq')
 
   // const pilots = [
