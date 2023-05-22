@@ -1,4 +1,5 @@
 import { NextPage } from 'next'
+import Router from 'next/router'
 import { useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { Bid } from '../types/Bid'
@@ -91,6 +92,7 @@ const BidForm: NextPage<Props> = ({ pilots, currentGp }) => {
 
       resetBid()
       setSuccess(true)
+      Router.reload()
     } catch (e) {
       console.error(e)
     }
