@@ -71,23 +71,26 @@ const BidForm: NextPage<Props> = ({ pilots, currentGp }) => {
         bidId = bids[0].id
       }
 
-      let { error: bidError } = await supabase.from('bids').upsert({
-        id: bidId,
-        gp: currentGp.id,
-        user: userRef.id,
-        p10: selectedP10,
-        first_retirement: selectedFirstRetirement,
-      } as Bid)
+      const response = await fetch('/api/bids', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: bidId,
+          gp: currentGp.id,
+          user: userRef.id,
+          p10: selectedP10,
+          first_retirement: selectedFirstRetirement,
+        } as Bid),
+      })
 
-      if (bidError) {
-        console.log('bidError', bidError)
+      if (response.status === 400) {
         if (!selectedP10) {
           setP10Error('Selecione o piloto')
         }
         if (!selectedFirstRetirement) {
           setFirstRetirementError('Selecione o piloto')
         }
-        throw bidError
+        return
       }
 
       resetBid()
