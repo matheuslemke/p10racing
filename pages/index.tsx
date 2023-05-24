@@ -169,14 +169,6 @@ export const getStaticProps = async () => {
   //     first_retirement: { name: 'Esteban Ocon' },
   //   },
   //   {
-  //     id: 29,
-  //     gp: 1,
-  //     user: 1,
-  //     points: 15,
-  //     p10: { name: 'Lance Stroll' },
-  //     first_retirement: { name: 'Yuki Tsunoda' },
-  //   },
-  //   {
   //     id: 30,
   //     gp: 4,
   //     user: 7,
@@ -192,11 +184,42 @@ export const getStaticProps = async () => {
   //     p10: { name: 'Lance Stroll' },
   //     first_retirement: { name: 'Oscar Piastri' },
   //   },
+  //   {
+  //     id: 29,
+  //     gp: 1,
+  //     user: 1,
+  //     points: 15,
+  //     p10: { name: 'Max Verstappen' },
+  //     first_retirement: { name: 'Fernando Alonso' },
+  //   },
+  //   {
+  //     id: 55,
+  //     gp: 3,
+  //     user: 1,
+  //     points: 0,
+  //     p10: { name: 'Sergio Pérez' },
+  //     first_retirement: { name: 'Carlos Sainz' },
+  //   },
   // ]
   // const gps = [
-  //   { id: 4, location: 'Azerbaijan', seq: 0 },
-  //   { id: 1, location: 'Miami', seq: 1 },
-  //   { id: 3, location: 'Imola', seq: 2 },
+  //   {
+  //     id: 4,
+  //     location: 'Azerbaijan',
+  //     seq: 0,
+  //     date: '2023-04-30T11:00:00+00:00',
+  //   },
+  //   {
+  //     id: 1,
+  //     location: 'Miami',
+  //     seq: 1,
+  //     date: '2023-05-07T19:30:00+00:00',
+  //   },
+  //   {
+  //     id: 3,
+  //     location: 'Monaco',
+  //     seq: 2,
+  //     date: '2023-05-28T13:00:00+00:00',
+  //   },
   // ]
 
   return {
