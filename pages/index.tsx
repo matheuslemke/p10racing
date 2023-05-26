@@ -7,12 +7,10 @@ import { FriendBid } from '../types/FriendBid'
 import { Gp } from '../types/Gp'
 import { Pilot } from '../types/Pilot'
 import { User } from '../types/User'
+import { getInitialServerProps } from '../utils/supabase-client'
+import Header from '../components/Header'
 
-export const config = {
-  unstable_runtimeJS: false,
-}
-
-interface Props {
+export interface Props {
   pilots: Pilot[]
   users: User[]
   bids: FriendBid[]
@@ -24,37 +22,15 @@ const Home: NextPage<Props> = ({ pilots, users, bids, gps }) => {
 
   return (
     <>
-      <Head>
-        <title>P10 Racing</title>
-        <meta
-          name="description"
-          content="P10 da rapaziada. Bora apostar no primeiro a se retirar da corrida e no décimo colocado."
-        />
-      </Head>
-      <main>
-        <header className="border-b-2 border-gray-600 border-solid">
-          <h1 className="p-5 text-2xl">P10 da rapaziada</h1>
-        </header>
-        <BidForm pilots={pilots} currentGp={currentGp} />
-        <FriendsBids users={users} bids={bids} gps={gps} />
-      </main>
+      <Header />
+      <BidForm pilots={pilots} currentGp={currentGp} />
+      <FriendsBids users={users} bids={bids} gps={gps} />
     </>
   )
 }
 
-export const getStaticProps = async () => {
-  const { data: pilots } = await supabase.from('pilots').select()
-  const { data: users } = await supabase
-    .from('users')
-    .select('id, name')
-    .order('name', { ascending: true })
-  const { data: bids } = await supabase
-    .from('bids')
-    .select('id, gp, user, p10(name), first_retirement(name), points')
-  const { data: gps } = await supabase
-    .from('gps')
-    .select('id, location, seq, date')
-    .order('seq')
+export const getServerSideProps = async () => {
+  const props = await getInitialServerProps()
 
   // const pilots = [
   //   { id: 1, name: 'Max Verstappen', number: 1 },
@@ -223,12 +199,7 @@ export const getStaticProps = async () => {
   // ]
 
   return {
-    props: {
-      pilots,
-      users,
-      bids,
-      gps,
-    },
+    props,
   }
 }
 

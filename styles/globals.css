@@ -16,10 +16,6 @@
     @apply text-base;
   }
 
-  form {
-    @apply p-7;
-  }
-
   select {
     @apply bg-slate-900;
     @apply border-2;

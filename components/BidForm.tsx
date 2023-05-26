@@ -101,47 +101,51 @@ const BidForm: NextPage<Props> = ({ pilots, currentGp }) => {
     }
   }
 
+  if (success) {
+    return (
+      <>
+        <h2 className="pl-4 pt-4">GP: {currentGp?.location}</h2>
+        <SuccessFeedback />
+      </>
+    )
+  }
+
   return (
     <>
-      <section>
-        <h2 className="pl-4 pt-4">GP: {currentGp?.location}</h2>
-        {success ? (
-          <SuccessFeedback />
-        ) : (
-          <form className="flex flex-col gap-6" onSubmit={handleFormSubmit}>
-            <UserIdentificator
-              handleUserChange={setUser}
-              error={userError}
-              handleOnFocus={setUserError}
-            />
-            <PilotSelector
-              category={'P-10'}
-              handleChangePilot={setSelectedP10}
-              pilots={pilots}
-              value={selectedP10}
-              error={p10Error}
-              handleOnFocus={setP10Error}
-            />
-            <PilotSelector
-              category={'1st Retirement'}
-              handleChangePilot={setSelectedFirstRetirement}
-              pilots={pilots}
-              value={selectedFirstRetirement}
-              error={firstRetirementError}
-              handleOnFocus={setFirstRetirementError}
-            />
-            <div className="w-full flex justify-center">
-              <button
-                type="submit"
-                className="border-2 border-solid border-slate-400 mt-6 py-2 px-8 w-fit disabled:border-slate-800 disabled:text-slate-800"
-                disabled={isClosed}
-              >
-                Salvar
-              </button>
-            </div>
-          </form>
-        )}
-      </section>
+      <h2 className="pl-4 pt-4">GP: {currentGp?.location}</h2>
+      <form className="flex flex-col gap-6 p-7">
+        <UserIdentificator
+          handleUserChange={setUser}
+          error={userError}
+          handleOnFocus={setUserError}
+        />
+        <PilotSelector
+          category={'P-10'}
+          handleChangePilot={setSelectedP10}
+          pilots={pilots}
+          value={selectedP10}
+          error={p10Error}
+          handleOnFocus={setP10Error}
+        />
+        <PilotSelector
+          category={'1st Retirement'}
+          handleChangePilot={setSelectedFirstRetirement}
+          pilots={pilots}
+          value={selectedFirstRetirement}
+          error={firstRetirementError}
+          handleOnFocus={setFirstRetirementError}
+        />
+        <div className="w-full flex justify-center">
+          <button
+            type="button"
+            onClick={handleFormSubmit}
+            className="border-2 border-solid border-slate-400 mt-6 py-2 px-8 w-fit disabled:border-slate-800 disabled:text-slate-800"
+            disabled={isClosed}
+          >
+            Salvar
+          </button>
+        </div>
+      </form>
     </>
   )
 }
