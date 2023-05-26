@@ -1,8 +1,6 @@
 import type { NextPage } from 'next'
-import Head from 'next/head'
 import BidForm from '../components/BidForm'
 import FriendsBids from '../components/FriendsBids'
-import { supabase } from '../lib/supabaseClient'
 import { FriendBid } from '../types/FriendBid'
 import { Gp } from '../types/Gp'
 import { Pilot } from '../types/Pilot'

@@ -1,35 +1,8 @@
 import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs'
-
 import { Props } from '../pages'
-
-// export const supabase = createBrowserSupabaseClient<Database>();
-
-// export const getActiveProductsWithPrices = async (): Promise<
-//   ProductWithPrice[]
-// > => {
-//   const { data, error } = await supabase
-//     .from('products')
-//     .select('*, prices(*)')
-//     .eq('active', true)
-//     .eq('prices.active', true)
-//     .order('metadata->index')
-//     .order('unit_amount', { foreignTable: 'prices' });
-
-//   if (error) {
-//     console.log(error.message);
-//   }
-//   // TODO: improve the typing here.
-//   return (data as any) || [];
-// };
-
-// export const updateUserName = async (user: User, name: string) => {
-//   await supabase
-//     .from('users')
-//     .update({
-//       full_name: name
-//     })
-//     .eq('id', user.id);
-// };
+import { UserRef } from '../types/UserRef'
+import { Gp } from '../types/Gp'
+import { NoUserRefError } from '../lib/errors/NoUserRefError'
 
 export const supabase = createBrowserSupabaseClient<any>()
 
@@ -48,4 +21,34 @@ export const getInitialServerProps = async (): Promise<Props> => {
     .order('seq')
 
   return { pilots, users, bids, gps } as Props
+}
+
+export const getUserRef = async (user: string): Promise<UserRef> => {
+  let { error, data: userRef } = await supabase
+    .from('users')
+    .select('id, name')
+    .eq('key', user)
+    .single()
+  if (error || !userRef) {
+    throw new NoUserRefError('O ID está errado!')
+  }
+  return userRef
+}
+
+export const getBidIdForUser = async (
+  currentGp: Gp,
+  userRef: UserRef
+): Promise<number> => {
+  let { error, data: bids } = await supabase
+    .from('bids')
+    .select('id')
+    .eq('gp', currentGp.id)
+    .eq('user', userRef.id)
+
+  if (error) throw error
+
+  if (bids && bids.length > 0) {
+    return bids[0].id
+  }
+  return -1
 }

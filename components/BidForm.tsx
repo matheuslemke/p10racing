@@ -1,13 +1,14 @@
 import { NextPage } from 'next'
 import Router from 'next/router'
 import { useState } from 'react'
-import { supabase } from '../lib/supabaseClient'
 import { Bid } from '../types/Bid'
 import { Gp } from '../types/Gp'
 import { Pilot } from '../types/Pilot'
 import PilotSelector from './PilotSelector'
 import SuccessFeedback from './SuccessFeedback'
 import UserIdentificator from './UserIdentificator'
+import { getBidIdForUser, getUserRef } from '../utils/supabase-client'
+import { NoUserRefError } from '../lib/errors/NoUserRefError'
 
 interface Props {
   pilots: Pilot[]
@@ -48,28 +49,8 @@ const BidForm: NextPage<Props> = ({ pilots, currentGp }) => {
     }
 
     try {
-      let bidId = undefined
-      let { error, data: userRef } = await supabase
-        .from('users')
-        .select('id, name')
-        .eq('key', user)
-        .single()
-      if (error || !userRef) {
-        setUserError('O ID está errado!')
-        throw error
-      }
-
-      let { error: bidDoesntExistsError, data: bids } = await supabase
-        .from('bids')
-        .select('id')
-        .eq('gp', currentGp.id)
-        .eq('user', userRef.id)
-
-      if (bidDoesntExistsError) throw bidDoesntExistsError
-
-      if (bids && bids.length > 0) {
-        bidId = bids[0].id
-      }
+      const userRef = await getUserRef(user)
+      const bidId = await getBidIdForUser(currentGp, userRef)
 
       const response = await fetch('/api/bids', {
         method: 'POST',
@@ -96,8 +77,13 @@ const BidForm: NextPage<Props> = ({ pilots, currentGp }) => {
       resetBid()
       setSuccess(true)
       Router.reload()
-    } catch (e) {
-      console.error(e)
+    } catch (error) {
+      if (error instanceof NoUserRefError) {
+        setUserError('O ID está errado!')
+        return
+      }
+      console.error(error)
+      throw error
     }
   }
 
@@ -113,7 +99,7 @@ const BidForm: NextPage<Props> = ({ pilots, currentGp }) => {
   return (
     <>
       <h2 className="pl-4 pt-4">GP: {currentGp?.location}</h2>
-      <form className="flex flex-col gap-6 p-7">
+      <form className="flex flex-col gap-6 p-7" onSubmit={handleFormSubmit}>
         <UserIdentificator
           handleUserChange={setUser}
           error={userError}
@@ -137,8 +123,7 @@ const BidForm: NextPage<Props> = ({ pilots, currentGp }) => {
         />
         <div className="w-full flex justify-center">
           <button
-            type="button"
-            onClick={handleFormSubmit}
+            type="submit"
             className="border-2 border-solid border-slate-400 mt-6 py-2 px-8 w-fit disabled:border-slate-800 disabled:text-slate-800"
             disabled={isClosed}
           >
