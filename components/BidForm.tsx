@@ -9,6 +9,7 @@ import SuccessFeedback from './SuccessFeedback'
 import UserIdentificator from './UserIdentificator'
 import { getBidIdForUser, getUserRef } from '../utils/supabase-client'
 import { NoUserRefError } from '../lib/errors/NoUserRefError'
+import Loading from './Loading'
 
 interface Props {
   pilots: Pilot[]
@@ -24,6 +25,7 @@ const BidForm: NextPage<Props> = ({ pilots, currentGp }) => {
   const [p10Error, setP10Error] = useState('')
   const [firstRetirementError, setFirstRetirementError] = useState('')
   const [isClosed, setIsClosed] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const resetBid = () => {
     setSelectedP10(0)
@@ -37,6 +39,7 @@ const BidForm: NextPage<Props> = ({ pilots, currentGp }) => {
   }
 
   const handleFormSubmit = async (evt: any) => {
+    setIsLoading(true)
     evt.preventDefault()
     resetErrors()
 
@@ -45,6 +48,7 @@ const BidForm: NextPage<Props> = ({ pilots, currentGp }) => {
     const now = new Date()
     if (now >= closeDate) {
       setIsClosed(true)
+      setIsLoading(false)
       return
     }
 
@@ -71,15 +75,18 @@ const BidForm: NextPage<Props> = ({ pilots, currentGp }) => {
         if (!selectedFirstRetirement) {
           setFirstRetirementError('Selecione o piloto')
         }
+        setIsLoading(false)
         return
       }
 
       resetBid()
       setSuccess(true)
+      setIsLoading(false)
       Router.reload()
     } catch (error) {
       if (error instanceof NoUserRefError) {
         setUserError('O ID está errado!')
+        setIsLoading(false)
         return
       }
       console.error(error)
@@ -125,9 +132,9 @@ const BidForm: NextPage<Props> = ({ pilots, currentGp }) => {
           <button
             type="submit"
             className="border-2 border-solid border-slate-400 mt-6 py-2 px-8 w-fit disabled:border-slate-800 disabled:text-slate-800"
-            disabled={isClosed}
+            disabled={isClosed || isLoading}
           >
-            Salvar
+            {isLoading ? <Loading /> : 'Salvar'}
           </button>
         </div>
       </form>
