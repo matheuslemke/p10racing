@@ -56,16 +56,24 @@ const BidForm: NextPage<Props> = ({ pilots, currentGp }) => {
       const userRef = await getUserRef(user)
       const bidId = await getBidIdForUser(currentGp, userRef)
 
+      const bid = {
+        gp: currentGp.id,
+        user: userRef.id,
+        p10: selectedP10,
+        first_retirement: selectedFirstRetirement,
+      } as Bid
+
+      if (bidId !== -1) {
+        console.log('bidId', bidId)
+        bid.id = bidId
+      }
+
+      console.log('bid', bid)
+
       const response = await fetch('/api/bids', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id: bidId,
-          gp: currentGp.id,
-          user: userRef.id,
-          p10: selectedP10,
-          first_retirement: selectedFirstRetirement,
-        } as Bid),
+        body: JSON.stringify(bid),
       })
 
       if (response.status === 400) {
