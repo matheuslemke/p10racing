@@ -64,11 +64,8 @@ const BidForm: NextPage<Props> = ({ pilots, currentGp }) => {
       } as Bid
 
       if (bidId !== -1) {
-        console.log('bidId', bidId)
         bid.id = bidId
       }
-
-      console.log('bid', bid)
 
       const response = await fetch('/api/bids', {
         method: 'POST',
