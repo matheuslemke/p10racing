@@ -3,6 +3,7 @@ import { Props } from '../pages'
 import { UserRef } from '../types/UserRef'
 import { Gp } from '../types/Gp'
 import { NoUserRefError } from '../lib/errors/NoUserRefError'
+import { RankingUser } from '../types/RankingUser'
 
 export const supabase = createBrowserSupabaseClient<any>()
 
@@ -51,4 +52,14 @@ export const getBidIdForUser = async (
     return bids[0].id
   }
   return -1
+}
+
+export const getPilotsRanking = async (): Promise<RankingUser[]> => {
+  let { error, data: rankingPilots } = await supabase
+    .from('ranking')
+    .select('name, points')
+
+  if (error) throw error
+
+  return rankingPilots as RankingUser[]
 }
