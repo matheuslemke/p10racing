@@ -1,11 +1,11 @@
-import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs'
-import { Props } from '../pages'
-import { UserRef } from '../types/UserRef'
-import { Gp } from '../types/Gp'
+import { createPagesBrowserClient } from '@supabase/auth-helpers-nextjs'
 import { NoUserRefError } from '../lib/errors/NoUserRefError'
+import { Gp } from '../types/Gp'
 import { RankingUser } from '../types/RankingUser'
+import { UserRef } from '../types/UserRef'
+import { Props } from '../app/page'
 
-export const supabase = createBrowserSupabaseClient<any>()
+export const supabase = createPagesBrowserClient<any>()
 
 export const getInitialServerProps = async (): Promise<Props> => {
   const { data: pilots } = await supabase.from('pilots').select()

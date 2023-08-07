@@ -1,5 +1,5 @@
 import { NextPage } from 'next'
-import { RankingUser } from '../types/RankingUser'
+import { RankingUser } from '../../types/RankingUser'
 
 interface Props {
   user: RankingUser

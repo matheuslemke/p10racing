@@ -1,4 +1,4 @@
-import { RankingUser } from '../types/RankingUser'
+import { RankingUser } from '../../types/RankingUser'
 
 interface Props {
   h: string

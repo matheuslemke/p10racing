@@ -1,5 +1,5 @@
 import { NextPage } from 'next'
-import { Pilot } from '../types/Pilot'
+import { Pilot } from '../../types/Pilot'
 import ErrorLabel from './ErrorLabel'
 import Required from './Required'
 

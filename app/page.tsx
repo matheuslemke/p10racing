@@ -1,12 +1,12 @@
 import type { NextPage } from 'next'
-import BidForm from '../components/BidForm'
-import FriendsBids from '../components/FriendsBids'
+import BidForm from './components/BidForm'
+import FriendsBids from './components/FriendsBids'
 import { FriendBid } from '../types/FriendBid'
 import { Gp } from '../types/Gp'
 import { Pilot } from '../types/Pilot'
 import { User } from '../types/User'
 import { getInitialServerProps } from '../utils/supabase-client'
-import Header from '../components/Header'
+import Header from './components/Header'
 
 export interface Props {
   pilots: Pilot[]
@@ -15,7 +15,9 @@ export interface Props {
   gps: Gp[]
 }
 
-const Home: NextPage<Props> = ({ pilots, users, bids, gps }) => {
+const Home = async () => {
+  const { pilots, users, bids, gps } = await getData()
+
   const currentGp = gps[gps.length - 1]
 
   return (
@@ -27,8 +29,8 @@ const Home: NextPage<Props> = ({ pilots, users, bids, gps }) => {
   )
 }
 
-export const getServerSideProps = async () => {
-  const props = await getInitialServerProps()
+const getData = async () => {
+  return getInitialServerProps()
 
   // const pilots = [
   //   { id: 1, name: 'Max Verstappen', number: 1 },
@@ -196,9 +198,9 @@ export const getServerSideProps = async () => {
   //   },
   // ]
 
-  return {
-    props,
-  }
+  // return {
+  //   props,
+  // }
 }
 
 export default Home

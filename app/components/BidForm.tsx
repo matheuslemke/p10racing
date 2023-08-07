@@ -1,14 +1,16 @@
+'use client'
+
 import { NextPage } from 'next'
 import Router from 'next/router'
 import { useState } from 'react'
-import { Bid } from '../types/Bid'
-import { Gp } from '../types/Gp'
-import { Pilot } from '../types/Pilot'
+import { Bid } from '../../types/Bid'
+import { Gp } from '../../types/Gp'
+import { Pilot } from '../../types/Pilot'
 import PilotSelector from './PilotSelector'
 import SuccessFeedback from './SuccessFeedback'
 import UserIdentificator from './UserIdentificator'
-import { getBidIdForUser, getUserRef } from '../utils/supabase-client'
-import { NoUserRefError } from '../lib/errors/NoUserRefError'
+import { getBidIdForUser, getUserRef } from '../../utils/supabase-client'
+import { NoUserRefError } from '../../lib/errors/NoUserRefError'
 import Loading from './Loading'
 
 interface Props {
@@ -87,7 +89,6 @@ const BidForm: NextPage<Props> = ({ pilots, currentGp }) => {
       resetBid()
       setSuccess(true)
       setIsLoading(false)
-      Router.reload()
     } catch (error) {
       if (error instanceof NoUserRefError) {
         setUserError('O ID está errado!')

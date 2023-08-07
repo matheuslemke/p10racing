@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { supabase } from '../../utils/supabase-client'
 
-export default async function handler(
+export default async function submit(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
